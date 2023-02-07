@@ -5,11 +5,56 @@
     <link rel="stylesheet" href="style.css">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Project 1</title>
+    <title>Document</title>
 </head>
 <body>
-    <div id="main"></div>
-    <button>TEST</button>
+
+    <div class="container">
+        <div class="form">
+            <form >
+                <div class="form-group">
+                    <label for="type">Choose the type you want:</label>
+                    <select id="type">
+                        <option value="null"> </option>
+                        <option value="multiplier">Multiplier</option>
+                        <option value="multiplier-optimised">Optimised multiplier</option>
+                        <option value="divider">Divider</option>
+                        <option value="divider-optimised">Optimised divider</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="">
+                        16 bit
+                        <input type="radio" name="bits" value="16">
+                    </label>
+                
+                    <label for="">
+                        32 bit
+                        <input type="radio" name="bits" value="32">
+                    </label>
+                </div>
+
+                <div class="custom-dropdown">
+                    <div class="form-group">
+                        <label for="first-operand">Multiplicant:</label>
+                        <input id="first-operand" type="text">
+                    </div>
+                    <div class="form-group">
+                        <label for="second-operand">Multiplier:</label>
+                        <input type="text" id="second-operand">
+                    </div>
+                </div>
+
+                <button role = "submit" class="form-button">ACCEPT</button>
+            </form>
+        </div>
+        <div id="main">
+            
+        </div>
+        <button class="test" defer>TEST</button>
+        <button class="undo" defer>UNDO</button>
+    </div>
     <script src="app.js" type="module"></script>
 </body>
 </html>
