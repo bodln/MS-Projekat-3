@@ -29,10 +29,12 @@ alu.steps.push(formater.subBinDec)
 //buttons
 const doButton = document.querySelector("#do")
 const undoButton = document.querySelector("#undo")
+const buttonConclude = document.querySelector("#conclude")
+const buttonReset = document.querySelector("#reset")
 
 let historyLog = []
 
-doButton.addEventListener("click", e => {
+let stepEvent = () => {
     const testDiv = alu.stepFunc(remandquot.value, divisor.value)
     if(testDiv[0]) {
         remandquot.setValue(testDiv[0])
@@ -40,6 +42,16 @@ doButton.addEventListener("click", e => {
     if(testDiv[1] != undefined){
         historyLog.push(testDiv[1])
         renderHistory()
+    }
+}
+
+doButton.addEventListener("click", e => {
+    stepEvent()
+})
+
+buttonConclude.addEventListener("click", e => {
+    for(let i = 0; i < divisor.value.length * 2; i++){
+        stepEvent()
     }
 })
 
@@ -57,7 +69,7 @@ let renderHistory = () => {
     })
 }
 
-undoButton.addEventListener("click", e => {
+let undoEvent = () => {
     const prevState = alu.undo()
     if(historyLog.length > 0){
         historyLog.pop()
@@ -72,25 +84,15 @@ undoButton.addEventListener("click", e => {
             console.log("Someting went oh so terribly wrong....")
         }
     }
+}
+
+undoButton.addEventListener("click", e => {
+    undoEvent()
 })
 
-
-// // paste this in app.js and rename what you must <---------------------------------------------------------
-//undoButton.addEventListener("click", e => {
-//const prevState = alu.undo()
-//if(prevState) {
-//        switch(prevState[0]) {
-//            case "remandquot":
-//                remandquot.setValue(prevState[1])
-//                break;
-//            default:
-//                console.log("Someting went oh so terribly wrong....")
-//        }
-//    }
-//})
-
-// Please i beg you 
-// When you do this 
-// Make sure you use optimised components, not regular ones
-// If you do otherwise you will give cancer to an orphaned child
-// Every time you do
+buttonReset.addEventListener("click", e => {
+    // <---------------------------------------------------------------- Dion-chan -------------------------------------------------
+    for(let i = 0; i < divisor.value.length * 2; i++){
+        undoEvent()
+    }
+})

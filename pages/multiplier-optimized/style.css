@@ -36,7 +36,7 @@ body {
         ". up-product down-alu . up down . "
         ". product product left control control . "
         ". . . . . . . "
-        ".  . undo . step . . ";
+        "reset . conclude . undo . step";
 }
 
 .multiplicant {
@@ -102,10 +102,28 @@ body {
     border-radius: 1rem;
     border: 2px solid #0000A5;
 }
-#do:hover, #undo:hover{
+
+#reset {
+    grid-area: reset;
+    background-color: #659EC7;
+    margin: 1rem 0 1rem 0;
+    border-radius: 1rem;
+    border: 2px solid #0000A5
+}
+
+#conclude {
+    grid-area: conclude;
+    background-color: #659EC7;
+    margin: 1rem 0 1rem 0;
+    border-radius: 1rem;
+    border: 2px solid #0000A5
+}
+
+#do:hover, #undo:hover, #conclude:hover, #reset:hover{
     background-color: #1F45FC;
     border: 2px solid #0000A5;
 }
+
 .left-control {
     grid-area: left;
     height: 70%;

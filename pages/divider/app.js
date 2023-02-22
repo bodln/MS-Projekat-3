@@ -44,10 +44,12 @@ alu.steps.push(divisor.shiftR)
 //buttons
 const doButton = document.querySelector("#do")
 const undoButton = document.querySelector("#undo")
+const buttonConclude = document.querySelector("#conclude")
+const buttonReset = document.querySelector("#reset")
 
 let historyLog = []
 
-doButton.addEventListener("click", e => {
+let stepEvent = () => {
     const testDiv = alu.stepFunc(remainder.value, divisor.value, quotient.value)
     if(testDiv[0]) {
         remainder.setValue(testDiv[0])
@@ -58,7 +60,16 @@ doButton.addEventListener("click", e => {
     }
 
     animate()
-    
+}
+
+doButton.addEventListener("click", e => {
+    stepEvent()
+})
+
+buttonConclude.addEventListener("click", e => {
+    for(let i = 0; i < (quotient.value.length + 1) * 3; i++){
+        stepEvent()
+    }
 })
 
 let renderHistory = () => {
@@ -75,31 +86,42 @@ let renderHistory = () => {
     })
 }
 
+let undoEvent = () => {
+    const prevState = alu.undo()
+    
+    if(historyLog.length > 0){
+        historyLog.pop()
+        renderHistory()
+    }
+
+    if(prevState) {
+        switch(prevState[0]) {
+            case "quotient":
+                quotient.setValue(prevState[1])
+                break;
+            case "remainder":
+                remainder.setValue(prevState[1])
+                break;
+            case "divisor":
+                divisor.setValue(prevState[1])
+                break;
+            default:
+                console.log("Someting went oh so terribly wrong....")
+        }
+
+        animate()
+    }
+}
+
 undoButton.addEventListener("click", e => {
-        const prevState = alu.undo()
-        
-        if(historyLog.length > 0){
-            historyLog.pop()
-            renderHistory()
-        }
+    undoEvent()
+})
 
-        if(prevState) {
-            switch(prevState[0]) {
-                case "quotient":
-                    quotient.setValue(prevState[1])
-                    break;
-                case "remainder":
-                    remainder.setValue(prevState[1])
-                    break;
-                case "divisor":
-                    divisor.setValue(prevState[1])
-                    break;
-                default:
-                    console.log("Someting went oh so terribly wrong....")
-            }
-
-            animate()
-        }
+buttonReset.addEventListener("click", e => {
+    // <---------------------------------------------------------------- Dion-chan -------------------------------------------------
+    for(let i = 0; i < (quotient.value.length + 1) * 3; i++){
+        undoEvent()
+    }
 })
 
 const animate = () => {

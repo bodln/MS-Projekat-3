@@ -32,10 +32,12 @@ alu.steps.push(product.shiftR)
 //buttons
 const buttonStep = document.querySelector("#do")
 const buttonUndo = document.querySelector("#undo")
+const buttonConclude = document.querySelector("#conclude")
+const buttonReset = document.querySelector("#reset")
 
 let historyLog = []
 
-buttonStep.addEventListener("click", e  => {
+let stepEvent = () => {
     const possibleProduct = alu.stepFunc(product.value, multiplicant.value)
     if(possibleProduct[0] != undefined) {
         product.setValue(possibleProduct[0])
@@ -44,8 +46,17 @@ buttonStep.addEventListener("click", e  => {
         historyLog.push(possibleProduct[1])
         renderHistory()
     }
+}
+
+buttonStep.addEventListener("click", e  => {
+    stepEvent()
 })
 
+buttonConclude.addEventListener("click", e => {
+    for(let i = 0; i < multiplicant.value.length * 2; i++){
+        stepEvent()
+    }
+})
 
 let renderHistory = () => {
 
@@ -63,7 +74,7 @@ let renderHistory = () => {
     })
 }
 
-buttonUndo.addEventListener("click", e => {
+let undoEvent = () => {
     const prevState = alu.undo()
     if(historyLog.length > 0){
         historyLog.pop()
@@ -77,5 +88,16 @@ buttonUndo.addEventListener("click", e => {
             default:
                 console.log("Someting went oh so terribly wrong....")
         }
+    }
+}
+
+buttonUndo.addEventListener("click", e => {
+    undoEvent()
+})
+
+buttonReset.addEventListener("click", e => {
+    // <---------------------------------------------------------------- Dion-chan -------------------------------------------------
+    for(let i = 0; i < multiplicant.value.length * 2; i++){
+        undoEvent()
     }
 })

@@ -36,7 +36,7 @@ body {
         ". up-product down-alu . up down . "
         ". remainer remainer left control control . "
         ". . . . . . . "
-        ".  . undo . step . . ";
+        "reset . conclude . undo . step";
 }
 
 .divisor {
@@ -90,7 +90,7 @@ body {
 #do {
     grid-area: step;
     background-color: #659EC7;
-    
+    border: 2px solid #0000A5;
     margin: 1rem 0 1rem 0;
     border-radius: 1rem;
 }
@@ -102,10 +102,29 @@ body {
     margin: 1rem 0 1rem 0;
     border-radius: 1rem;
 }
-#do:hover, #undo:hover{
+
+
+#reset {
+    grid-area: reset;
+    background-color: #659EC7;
+    margin: 1rem 0 1rem 0;
+    border-radius: 1rem;
+    border: 2px solid #0000A5
+}
+
+#conclude {
+    grid-area: conclude;
+    background-color: #659EC7;
+    margin: 1rem 0 1rem 0;
+    border-radius: 1rem;
+    border: 2px solid #0000A5
+}
+
+#do:hover, #undo:hover, #conclude:hover, #reset:hover{
     background-color: #1F45FC;
     border: 2px solid #0000A5;
 }
+
 .left-control {
     grid-area: left;
     height: 70%;

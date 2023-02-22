@@ -42,10 +42,12 @@ alu.steps.push(multiplicant.shiftL)
 //buttons
 const buttonStep = document.querySelector("#do")
 const buttonUndo = document.querySelector("#undo")
+const buttonConclude = document.querySelector("#conclude")
+const buttonReset = document.querySelector("#reset")
 
 let historyLog = []
 
-buttonStep.addEventListener("click", e  => {
+let stepEvent = () => {
     const possibleProduct = alu.stepFunc(product.value, multiplicant.value, multiplier.value)
     if(possibleProduct[0] != undefined) {
         product.setValue(possibleProduct[0])
@@ -56,8 +58,17 @@ buttonStep.addEventListener("click", e  => {
     }
 
     animate()
+}
+
+buttonStep.addEventListener("click", e  => {
+    stepEvent()
 })
 
+buttonConclude.addEventListener("click", e => {
+    for(let i = 0; i < multiplier.value.length * 3; i++){
+        stepEvent()
+    }
+})
 
 let renderHistory = () => {
 
@@ -75,7 +86,7 @@ let renderHistory = () => {
     })
 }
 
-buttonUndo.addEventListener("click", e => {
+let undoEvent = () => {
     const prevState = alu.undo()
     if(historyLog.length > 0){
         historyLog.pop()
@@ -97,6 +108,22 @@ buttonUndo.addEventListener("click", e => {
         }
         animate()
     }
+}
+
+buttonUndo.addEventListener("click", e => {
+    undoEvent()
+})
+
+buttonReset.addEventListener("click", e => {
+    // <---------------------------------------------------------------- Dion-chan -------------------------------------------------
+    for(let i = 0; i < multiplier.value.length * 3; i++){
+        undoEvent()
+    }
+    for(const component of components) {
+        component.classList.remove("active")
+    }
+    controlC.style.setProperty("box-shadow", "none")
+    document.querySelector("#control-view-port").textContent = ` `
 })
 
 const animate = () => {
@@ -113,14 +140,14 @@ const animate = () => {
 
     //CPROVERA ZA CONTROL, UKOLIKO JE POSLEDNJA KOMPONENTA MULTIPLIER, PROMENA CARRY OUT-A
     if (componentName === "multiplier") {
-        document.querySelector("#control-view-port").textContent = `1 = ${alu.carryOut}`
+        document.querySelector("#control-view-port").textContent = `Carry out = ${alu.carryOut}`
         //AKO JE SABIRANJE DOZVOLJENO ZELENI GLOW, A AKO NIJE CRVENI
         alu.carryOut === "0" ? controlC.style.setProperty("--animation-primary", "red") : controlC.style.setProperty("--animation-primary", "green")
     }
 
     //PROVERA ZA ALU, UKOLIKO JE CARRY OUT 1 I UKOLIKO JE NA RED PRODUCT
     if (alu.carryOut === "1" && componentName === "multiplicand") {
-        console.log("ALU ACTIVATED");
+        //console.log("ALU ACTIVATED");
         ALUC.classList.add("active");
     }
 }
