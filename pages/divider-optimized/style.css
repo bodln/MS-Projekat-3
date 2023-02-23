@@ -231,3 +231,13 @@ p {
 .historyItem {
     margin-bottom: 16px;
 }
+
+.active {
+    --animation-primary: white;
+    filter: drop-shadow(0 0 1rem var(--animation-primary));   
+}
+
+.active-span {
+    border-radius: 100vmax;
+    border: 1px solid red;
+}

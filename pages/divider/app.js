@@ -132,6 +132,9 @@ const animate = () => {
         component.classList.remove("active")
     }
     ALUC.classList.remove("active");
+    divisor.setValue(divisor.value)
+    quotient.setValue(quotient.value)
+    remainder.setValue(remainder.value)
     
     //GET THE LAST COMPONENT TROUGH UNDOSTACK
     const componentName = alu.undoStack[alu.undoStack.length-1][0]
@@ -154,5 +157,13 @@ const animate = () => {
     if (componentName === "remainder") {
         divisorC.classList.add("active")
         ALUC.classList.add("actve");
+    }
+
+    if ( componentName == "divisor" ) {
+        divisor.view.textContent = `${alu.undoStack[alu.undoStack.length-1][1]} --> ${divisor.value}`
+    }
+
+    if (alu.currStep==1) {
+        ALUC.classList.add("active")
     }
 }

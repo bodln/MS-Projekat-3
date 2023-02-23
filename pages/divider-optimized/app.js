@@ -21,7 +21,13 @@ const divisor = new Divisor(document.querySelector("#divisor-view-port"), `${Ext
 const remandquot = new RemainderAndQuotient(document.querySelector("#remainder-view-port"), `${Extender("0", initialValues.divisor.length * 2)}${initialValues.divident}`)
 const alu = new ALU()
 
+//KOMPONENTE VIZUELNO
+const divisorC = document.querySelector(".divisor")
+const remainderC = document.querySelector('.remainder')
+const controlC = document.querySelector(".control")
+const aluC = document.querySelector(".alu")
 
+const components = [divisorC, remainderC, controlC, aluC]
 
 alu.steps.push(remandquot.shiftL)
 alu.steps.push(formater.subBinDec)
@@ -43,6 +49,8 @@ let stepEvent = () => {
         historyLog.push(testDiv[1])
         renderHistory()
     }
+
+    animate()
 }
 
 doButton.addEventListener("click", e => {
@@ -50,9 +58,12 @@ doButton.addEventListener("click", e => {
 })
 
 buttonConclude.addEventListener("click", e => {
-    for(let i = 0; i < divisor.value.length * 2; i++){
+    var concludeInterval = setInterval( () => {
         stepEvent()
-    }
+        if ( alu.iteration == divisor.value.length ) {
+            clearInterval(concludeInterval)
+        }
+    }, 1000 )
 })
 
 let renderHistory = () => {
@@ -88,6 +99,14 @@ let undoEvent = () => {
 
 undoButton.addEventListener("click", e => {
     undoEvent()
+    animate()
+    if(alu.undoStack.length == 0) {
+        for(const component of components) {
+            component.classList.remove("active")
+        }
+    }
+
+    document.querySelector("#control-view-port").textContent = ""
 })
 
 buttonReset.addEventListener("click", e => {
@@ -95,4 +114,38 @@ buttonReset.addEventListener("click", e => {
     for(let i = 0; i < divisor.value.length * 2; i++){
         undoEvent()
     }
+
+    for(const component of components) {
+        component.classList.remove("active")
+    }
+    document.querySelector("#control-view-port").textContent = ""
+    remandquot.setValue(remandquot.value)
 })
+
+const animate = () => {
+    //EL RESETO
+    for(const component of components) {
+        component.classList.remove("active")
+    }
+    document.querySelector("#control-view-port").textContent = ""
+
+    remainderC.classList.add("active")
+    if(alu.currStep === 0) {
+        //POSTAVI RAZLIKU U CONTROL
+        controlC.classList.add("active")
+
+        const resault = parseInt(formater.binToDec(divisor.value)) - parseInt(formater.binToDec(remandquot.value))
+
+        aluC.classList.add("active")
+        controlC.style.setProperty("--animation-primary", "red")
+        document.querySelector("#control-view-port").textContent = resault
+        divisorC.classList.add("active")
+
+        if ( alu.replaceLSB == '1' && resault >= 0 ) {
+            controlC.style.setProperty("--animation-primary", "green") 
+            const initial = remandquot.value
+            remandquot.view.innerHTML = ""
+            remandquot.view.innerHTML += `${initial.slice(0, -1)}<span class='active-span'>${initial.slice(-1)}</span>`
+        }
+    }
+}

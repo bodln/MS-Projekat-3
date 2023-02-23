@@ -99,7 +99,7 @@ buttonSubmit.addEventListener("click", e=> {
 
     if (!checkValidation(firstOperand.value, bits) || !checkValidation(secondOperand.value, bits/2)) {
         //@bodln I ovde
-        alert("Uneseni broj ne može biti predstavljen trenutnim brojem bitova.")
+        alert("Uneseni broj(evi) ne može/gu biti predstavljen/i trenutnim brojem bitova, molimo unesite durgi broj ili promentie broj bitova tako da vaš broj može biti predstavljen (brojevu su zaokruzeni crveno)")
         return
     }
 

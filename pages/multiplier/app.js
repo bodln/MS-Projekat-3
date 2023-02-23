@@ -133,6 +133,11 @@ const animate = () => {
     for(let i=0; i<components.length; i++) {
         components[i].classList.remove("active")
     }
+    
+    multiplier.setValue(multiplier.value)
+    multiplicant.setValue(multiplicant.value)
+    product.setValue(product.value)
+
     ALUC.classList.remove("active");
 
     //ACTRIVATE CONTROL
@@ -145,14 +150,20 @@ const animate = () => {
 
     //CPROVERA ZA CONTROL, UKOLIKO JE POSLEDNJA KOMPONENTA MULTIPLIER, PROMENA CARRY OUT-A
     if (componentName === "multiplier") {
+        multiplier.viewBind.textContent = `${alu.undoStack[alu.undoStack.length-1][1]} ---> ${multiplier.value}`
         document.querySelector("#control-view-port").textContent = `Carry out = ${alu.carryOut}`
         //AKO JE SABIRANJE DOZVOLJENO ZELENI GLOW, A AKO NIJE CRVENI
         alu.carryOut === "0" ? controlC.style.setProperty("--animation-primary", "red") : controlC.style.setProperty("--animation-primary", "green")
     }
 
-    //PROVERA ZA ALU, UKOLIKO JE CARRY OUT 1 I UKOLIKO JE NA RED PRODUCT
-    if (alu.carryOut === "1" && componentName === "multiplicand") {
-        //console.log("ALU ACTIVATED");
-        ALUC.classList.add("active");
+    if (componentName === "multiplicand") {
+        multiplicant.viewBind.textContent = `${alu.undoStack[alu.undoStack.length-1][1]} <--- ${multiplicant.value}`
     }
+
+    if (componentName === "product" && alu.carryOut === '1') {
+        product.viewBind.textContent= (`${alu.undoStack[alu.undoStack.length-1][1]} \n +${multiplicant.value} \n ${product.value}`)
+        ALUC.classList.add("active");
+        multiplicandC.classList.add("active")
+    }
+
 }

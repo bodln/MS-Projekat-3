@@ -135,16 +135,14 @@ const animate = () => {
             const viewPort = product.viewBind
             const initial = viewPort.textContent
             viewPort.innerHTML = ""
-            viewPort.innerHTML = `<span class= 'active-span'> ${initial.slice(0, initial.length/2)} </span>`
-            viewPort.innerHTML += `${initial.slice(initial.length/2-1, -1)}`
+            viewPort.innerHTML += `${multiplicant.value} <br><span style= 'margin-left: -2ch' >+ ${alu.undoStack[alu.undoStack.length-1][1]}</span><br>`
+            viewPort.innerHTML += `<span class= 'active-span'> ${initial.slice(0, initial.length/2)} </span>`
+            viewPort.innerHTML += `${initial.slice(initial.length/2-1, initial.length)}`
             multiplicantC.classList.add("active")
             aluC.classList.add("active")
         }
 
     }
-    
-
-
 }
 
 const signalLSB = (viewPort) => {
