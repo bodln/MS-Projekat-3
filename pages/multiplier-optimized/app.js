@@ -25,6 +25,12 @@ const multiplicant = new Multiplicant(document.querySelector("#multiplicant-view
 const alu = new ALUoptimised()
 const product = new Product(document.querySelector("#product-view-port"), BaseExtender(baseValues.multiplier, baseValues.multiplicant.length))
 
+//COMPONENTS VISUAL
+const multiplicantC = document.querySelector(".multiplicant")
+const aluC = document.querySelector(".alu")
+const productC = document.querySelector(".product")
+const controlC = document.querySelector(".control")
+const components = [multiplicantC, aluC, productC, controlC]
 
 alu.steps.push(formater.addBin)
 alu.steps.push(product.shiftR)
@@ -46,6 +52,8 @@ let stepEvent = () => {
         historyLog.push(possibleProduct[1])
         renderHistory()
     }
+
+    animate()
 }
 
 buttonStep.addEventListener("click", e  => {
@@ -53,9 +61,10 @@ buttonStep.addEventListener("click", e  => {
 })
 
 buttonConclude.addEventListener("click", e => {
-    for(let i = 0; i < multiplicant.value.length * 2; i++){
+    var concludeInterval = setInterval(() => {
         stepEvent()
-    }
+        alu.iteration === multiplicant.value.length ? clearInterval(concludeInterval) : ""
+    }, 1000)
 })
 
 let renderHistory = () => {
@@ -93,6 +102,7 @@ let undoEvent = () => {
 
 buttonUndo.addEventListener("click", e => {
     undoEvent()
+    animate()
 })
 
 buttonReset.addEventListener("click", e => {
@@ -100,4 +110,55 @@ buttonReset.addEventListener("click", e => {
     for(let i = 0; i < multiplicant.value.length * 2; i++){
         undoEvent()
     }
+
+    for(const component of components) {
+        component.classList.remove("active")
+    }
 })
+
+const animate = () => {
+    //RESET ALL COMPONENTS 
+    for(let i = 0 ; i < components.length-1; i++) {
+        components[i].classList.remove("active")
+    }
+
+    controlC.classList.add("active")
+    productC.classList.add("active")
+
+    if (alu.currStep === 1) {
+        signalLSB(product.viewBind)   
+        const LSB = product.value.slice(-1)
+        document.querySelector("#control-view-port").textContent = `Carry out = ${LSB}`
+        LSB === '1' ? controlC.style.setProperty("--animation-primary", "green") : controlC.style.setProperty("--animation-primary", "red")
+
+        if(isLSBOne(product.value)) {
+            const viewPort = product.viewBind
+            const initial = viewPort.textContent
+            viewPort.innerHTML = ""
+            viewPort.innerHTML = `<span class= 'active-span'> ${initial.slice(0, initial.length/2)} </span>`
+            viewPort.innerHTML += `${initial.slice(initial.length/2-1, -1)}`
+            multiplicantC.classList.add("active")
+            aluC.classList.add("active")
+        }
+
+    }
+    
+
+
+}
+
+const signalLSB = (viewPort) => {
+    const initial = viewPort.textContent.split("")
+    viewPort.innerHTML = ""
+    for(let i = 0; i < initial.length-1 ; i++) {
+        viewPort.innerHTML += initial[i]
+    }
+    viewPort.innerHTML += `<span class = 'active-span'>${initial[initial.length-1]}</span>`
+}
+
+const isLSBOne = (binary) => {
+    if(binary.slice(-1) === '1')
+        return true
+
+    return false
+}

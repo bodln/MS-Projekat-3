@@ -33,7 +33,7 @@ const remainderC = document.querySelector(".remainder")
 const ALUC = document.querySelector(".alu")
 const controlC = document.querySelector(".control")
 
-const components = [divisorC, quotientC, remainderC, ALUC]
+const components = [divisorC, quotientC, remainderC, ALUC, controlC]
 
 console.log(initialValues.divident)
 
@@ -67,9 +67,11 @@ doButton.addEventListener("click", e => {
 })
 
 buttonConclude.addEventListener("click", e => {
-    for(let i = 0; i < (quotient.value.length + 1) * 3; i++){
+    //VAR ZATO STO INTERVAL CLIRAMO KAD SE FUKNCIJA ZAVRSI I LOKALNE PROMENLJIVE NESTANU 
+    var concludeInterval = setInterval( () => {
         stepEvent()
-    }
+        alu.iteration === (quotient.value.length + 1) ? clearInterval(concludeInterval) : ""
+    }, 1000)
 })
 
 let renderHistory = () => {
@@ -130,7 +132,6 @@ const animate = () => {
         component.classList.remove("active")
     }
     ALUC.classList.remove("active");
-    controlC.style.setProperty("border", "none")
     
     //GET THE LAST COMPONENT TROUGH UNDOSTACK
     const componentName = alu.undoStack[alu.undoStack.length-1][0]
@@ -144,8 +145,8 @@ const animate = () => {
 
         alu.carryIn === "1" ? controlC.style.setProperty("--animation-primary", "green") : controlC.style.setProperty("--animation-primary", "red")
 
-        document.querySelector("#control-view-port").textContent = `1 = ${alu.carryIn}`
-        controlC.style.setProperty("border", ".2rem solid var(--animation-primary)")
+        document.querySelector("#control-view-port").textContent = `Carry in = ${alu.carryIn}`
+        controlC.classList.add("active")
         console.log(ALUC.classList);
     }
 

@@ -27,7 +27,7 @@ const controlC = document.querySelector(".control")
 const ALUC = document.querySelector(".alu")
 const productC = document.querySelector(".product")
 
-const components = [multiplierC, multiplicandC, ALUC, productC]
+const components = [multiplierC, multiplicandC, ALUC, productC, controlC]
 
 //COMPONENTS LOGIC
 const multiplier = new Multiplier(document.querySelector("#multiplier-view-port"), baseValues.multiplier)
@@ -65,14 +65,18 @@ buttonStep.addEventListener("click", e  => {
 })
 
 buttonConclude.addEventListener("click", e => {
-    for(let i = 0; i < multiplier.value.length * 3; i++){
+    var doInterval = setInterval( () => {
         stepEvent()
-    }
+        if (alu.iteration == multiplier.value.length) {
+            clearInterval(doInterval)
+        }
+    }, 1000)
 })
 
 let renderHistory = () => {
 
     const history = document.getElementById("history");
+    //SEKURITI RISC, REFACTOR CODE?
     history.innerHTML = "";
 
     historyLog.forEach((log) => {
@@ -115,23 +119,24 @@ buttonUndo.addEventListener("click", e => {
 })
 
 buttonReset.addEventListener("click", e => {
-    // <---------------------------------------------------------------- Dion-chan -------------------------------------------------
+    // <---------------------------------------------------------------- @dejanaksovic DONE -------------------------------------------------
     for(let i = 0; i < multiplier.value.length * 3; i++){
         undoEvent()
     }
     for(const component of components) {
         component.classList.remove("active")
     }
-    controlC.style.setProperty("box-shadow", "none")
-    document.querySelector("#control-view-port").textContent = ` `
 })
 
 const animate = () => {
-    //RESET ALL COMPONENTS 
-    for(const component of components) {
-        component.classList.remove("active")
+    //RESET ALL COMPONENTS EXCEPT CONTROL, WHICH IS TO BE DETERMENED TO COLOR
+    for(let i=0; i<components.length; i++) {
+        components[i].classList.remove("active")
     }
     ALUC.classList.remove("active");
+
+    //ACTRIVATE CONTROL
+    controlC.classList.add("active")
 
     //POSLEDNJA KOMPONENTA NA KOJOJ JE IZVRSENA KOMPUTACIJA IZ ALU STACKA SE UZIMA I STAVLJA SE DA JE ACTIVE
     const componentName = alu.undoStack[alu.undoStack.length-1][0]
